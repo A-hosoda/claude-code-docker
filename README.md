@@ -1,6 +1,6 @@
 # Claude Code Docker
 
-Run [Claude Code CLI](https://docs.anthropic.com/claude/docs/claude-code-cli-usage) safely in a Docker container. This containerized setup provides a controlled environment for macOS and Linux users who want to interact with Claude's coding capabilities without risking accidental file modifications.
+Run [Claude Code CLI](https://docs.anthropic.com/claude/docs/claude-code-cli-usage) in a Docker container for enhanced safety. This containerized setup provides a controlled environment for macOS and Linux users who want to interact with Claude's coding capabilities while minimizing the risk of unintended file modifications.
 
 ---
 
@@ -16,9 +16,9 @@ Claude Code CLI is a powerful command-line tool that leverages Claude AI for var
 - **Feature Implementation** - Build new functionality with AI assistance
 
 This Docker environment provides several advantages:
-- Isolated execution environment
+- Isolated execution environment to reduce risks
 - Consistent configuration across team members
-- Option for read-only file access
+- Option for read-only file access to protect critical files
 - Persistent authentication
 - Easy installation and updates
 

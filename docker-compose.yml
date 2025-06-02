@@ -1,0 +1,27 @@
+# ./docker-compose.yml
+version: "3.9"
+
+services:
+  claude:
+    build: .
+    image: claude-code-cli:latest
+    container_name: claude-code
+    working_dir: /workspace
+
+    # Mount src directory from host to /workspace
+    # Use :ro (read-only) to prevent accidental modifications
+    volumes:
+      - ./src:/workspace
+      # Volume for Claude configuration
+      - claude_data:/home/dev/.claude-code
+
+    # Pass API key for non-interactive mode
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+
+    tty: true         # For interactive REPL
+    stdin_open: true
+
+volumes:
+  claude_data:
+    # Volume to persist authentication data

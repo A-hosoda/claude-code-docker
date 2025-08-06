@@ -9,15 +9,15 @@ services:
     working_dir: /workspace
 
     # Mount src directory from host to /workspace
-    # Use :ro (read-only) to prevent accidental modifications
     volumes:
       - ./src:/workspace
-      # Volume for Claude configuration
-      - claude_data:/home/dev/.claude-code
+      # Bind mount for persistent Claude configuration (including auth)
+      - ./claude-config:/home/dev/.config/claude
+      # Mount custom commands to the correct Claude Code location
+      - ./custom-commands:/workspace/.claude/commands
+      # Mount custom scripts directory
+      - ./custom-scripts:/home/dev/custom-scripts
 
-    # Pass API key for non-interactive mode
-    environment:
-      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
 
     tty: true         # For interactive REPL
     stdin_open: true

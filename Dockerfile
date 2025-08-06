@@ -29,9 +29,28 @@ RUN useradd -m -d /home/dev -s /bin/bash dev
 RUN npm config set os linux \
  && npm install -g @anthropic-ai/claude-code --force --no-os-check
 
+# ---- Create directories for custom commands and scripts ----
+RUN mkdir -p /home/dev/.config/claude /home/dev/custom-scripts /workspace/.claude/commands \
+    && chown -R dev:dev /home/dev/ /workspace/
+
+# ---- Install Python and uv for MCP servers ----
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 \
+    python3-pip \
+    python3-venv \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+    && pip3 install --no-cache-dir --upgrade pip \
+    && curl -LsSf https://astral.sh/uv/install.sh | sh \
+    && mv /root/.local/bin/uv /usr/local/bin/uv \
+    && mv /root/.local/bin/uvx /usr/local/bin/uvx
+
 # ---- Working directory (to be mounted from host) ----
 WORKDIR /workspace
 USER dev
+
+# Add custom scripts directory to PATH
+ENV PATH="/home/dev/custom-scripts:${PATH}"
 
 # Default to shell. Customize as needed
 ENTRYPOINT ["/bin/bash"]

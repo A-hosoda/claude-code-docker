@@ -46,7 +46,7 @@ check_file() {
     local file_count
 
     if [ -d "$dir" ]; then
-        file_count=$(find "$dir" -maxdepth 1 -type f | wc -l | tr -d ' ')
+        file_count=$(find "$dir" -maxdepth 1 -type f 2>/dev/null | wc -l | tr -d ' ')
         if [ "$file_count" -gt 0 ]; then
             print_result "$label" "ok"
         else

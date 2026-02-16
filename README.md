@@ -43,13 +43,28 @@ git clone https://github.com/A-hosoda/claude-code-docker.git
 cd claude-code-docker
 ```
 
-### 2. Build the Docker image
+### 2. GitHub CLI Token Setup
+
+Docker コンテナ内で GitHub CLI（`gh`）の拡張機能を使用するには、`GH_TOKEN` の設定が必要です。
+
+```bash
+# ホストマシンで gh にログイン済みであることを確認
+gh auth status
+
+# .env ファイルにトークンを書き出す（docker-compose が自動で読み込む）
+echo "GH_TOKEN=$(gh auth token)" > .env
+```
+
+> **Note:** トークンが期限切れになった場合は、再度 `echo` コマンドを実行してください。
+> `.env` ファイルは `.gitignore` に含まれているため、リポジトリにコミットされません。
+
+### 3. Build the Docker image
 
 ```bash
 docker compose build
 ```
 
-### 3. Prepare your source code
+### 4. Prepare your source code
 
 Place your project files in the `src` directory:
 
@@ -58,7 +73,7 @@ mkdir -p src/your-project
 # Copy or create your project files in src/your-project
 ```
 
-### 4. Custom Commands and Scripts (Optional)
+### 5. Custom Commands and Scripts (Optional)
 
 This setup supports custom commands and scripts:
 
@@ -78,7 +93,7 @@ Make it executable:
 chmod +x custom-scripts/analyze.sh
 ```
 
-### 5. MCP (Model Context Protocol) Setup
+### 6. MCP (Model Context Protocol) Setup
 
 MCP サーバーを使用する場合:
 

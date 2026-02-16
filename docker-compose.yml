@@ -3,7 +3,13 @@ version: "3.9"
 
 services:
   claude:
-    build: .
+    build:
+      context: .
+      additional_contexts:
+        gh-ext-pr-unresolved: ~/Develop/mywork/claude-code/gh-pr-unresolved
+        gh-ext-auto-review-fix: ~/Develop/mywork/claude-code/gh-auto-review-fix
+        gh-ext-pr-check: ~/Develop/mywork/claude-code/gh-pr-check
+        gh-ext-ai-review: ~/Develop/mywork/claude-code/gh-ai-review
     image: claude-code-cli:latest
     container_name: claude-code
     working_dir: /workspace
@@ -15,9 +21,14 @@ services:
       - ./claude-config:/home/dev/.config/claude
       # Mount custom commands to the correct Claude Code location
       - ./custom-commands:/workspace/.claude/commands
+
+      - ./custom-agents:/workspace/.claude/agents
       # Mount custom scripts directory
       - ./custom-scripts:/home/dev/custom-scripts
 
+
+    environment:
+      - GH_TOKEN=${GH_TOKEN}
 
     tty: true         # For interactive REPL
     stdin_open: true

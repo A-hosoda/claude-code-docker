@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ripgrep \
     ca-certificates \
     gnupg \
+    jq \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -48,6 +49,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # ---- Working directory (to be mounted from host) ----
 WORKDIR /workspace
 USER dev
+
+# ---- Install GitHub CLI extensions ----
+# Copy from local repos via docker-compose additional_contexts (no auth required)
+RUN mkdir -p ~/.local/share/gh/extensions
+COPY --from=gh-ext-pr-unresolved --chown=dev:dev . /home/dev/.local/share/gh/extensions/gh-pr-unresolved
+COPY --from=gh-ext-auto-review-fix --chown=dev:dev . /home/dev/.local/share/gh/extensions/gh-auto-review-fix
+COPY --from=gh-ext-pr-check --chown=dev:dev . /home/dev/.local/share/gh/extensions/gh-pr-check
+COPY --from=gh-ext-ai-review --chown=dev:dev . /home/dev/.local/share/gh/extensions/gh-ai-review
+RUN chmod +x ~/.local/share/gh/extensions/*/gh-*
 
 # Add custom scripts directory to PATH
 ENV PATH="/home/dev/custom-scripts:${PATH}"

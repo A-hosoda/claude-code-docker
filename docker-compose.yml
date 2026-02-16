@@ -25,6 +25,8 @@ services:
       - ./custom-agents:/workspace/.claude/agents
       # Mount custom scripts directory
       - ./custom-scripts:/home/dev/custom-scripts
+      # Mount Docker-specific Claude Code settings (read-only)
+      - ./docker-claude-config/settings.local.json:/workspace/.claude/settings.local.json:ro
 
 
     environment:

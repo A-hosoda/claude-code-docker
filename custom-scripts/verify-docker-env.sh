@@ -1,118 +1,65 @@
 #!/bin/bash
-# Verify Docker environment setup for Claude Code
-# Usage: verify-docker-env.sh
-# Exit code: 0 if all checks pass, 1 if any check fails
+# Verify Docker environment for Claude Code
+# Run inside the container to check all required components
 
 set -euo pipefail
 
-# --- Constants ---
-PASS_COUNT=0
-FAIL_COUNT=0
-TOTAL_COUNT=0
-LABEL_WIDTH=35
+pass=0
+fail=0
 
-# --- Output helpers ---
-print_result() {
+check() {
     local label="$1"
-    local status="$2"
-    local padding
-
-    padding=$(printf '%*s' $((LABEL_WIDTH - ${#label})) '' | tr ' ' '.')
-    if [ "$status" = "ok" ]; then
-        printf "[CHECK] %s %s OK\n" "$label" "$padding"
-        PASS_COUNT=$((PASS_COUNT + 1))
+    local condition="$2"
+    printf "[CHECK] %-35s" "$label"
+    if eval "$condition" > /dev/null 2>&1; then
+        echo "OK"
+        ((pass++))
     else
-        printf "[CHECK] %s %s FAIL\n" "$label" "$padding"
-        FAIL_COUNT=$((FAIL_COUNT + 1))
-    fi
-    TOTAL_COUNT=$((TOTAL_COUNT + 1))
-}
-
-# --- Check functions ---
-check_command() {
-    local label="$1"
-    local cmd="$2"
-
-    if command -v "$cmd" > /dev/null 2>&1; then
-        print_result "$label" "ok"
-    else
-        print_result "$label" "fail"
+        echo "FAIL"
+        ((fail++))
     fi
 }
 
-check_file() {
-    local label="$1"
-    local dir="$2"
-    local file_count
+echo "=== Claude Code Docker Environment Verification ==="
+echo ""
 
-    if [ -d "$dir" ]; then
-        file_count=$(find "$dir" -maxdepth 1 -type f 2>/dev/null | wc -l | tr -d ' ')
-        if [ "$file_count" -gt 0 ]; then
-            print_result "$label" "ok"
-        else
-            print_result "$label" "fail"
-        fi
-    else
-        print_result "$label" "fail"
-    fi
-}
+# 1. Node.js
+check "Node.js" "command -v node"
 
-check_json() {
-    local label="$1"
-    local path="$2"
+# 2. npm
+check "npm" "command -v npm"
 
-    if [ -f "$path" ] && jq empty "$path" > /dev/null 2>&1; then
-        print_result "$label" "ok"
-    else
-        print_result "$label" "fail"
-    fi
-}
+# 3. Claude Code CLI
+check "Claude Code CLI" "command -v claude"
 
-check_gh_auth() {
-    local label="$1"
+# 4. GitHub CLI
+check "gh CLI" "command -v gh"
 
-    if gh auth status > /dev/null 2>&1; then
-        print_result "$label" "ok"
-    else
-        print_result "$label" "fail"
-    fi
-}
+# 5. gh extensions
+check "gh extensions directory" "[ -d ~/.local/share/gh/extensions ]"
 
-check_gh_extension() {
-    local label="$1"
-    local ext="$2"
+# 6. ripgrep
+check "ripgrep" "command -v rg"
 
-    if gh "$ext" --help > /dev/null 2>&1; then
-        print_result "$label" "ok"
-    else
-        print_result "$label" "fail"
-    fi
-}
+# 7. Python / uv
+check "Python3" "command -v python3"
+check "uv" "command -v uv"
 
-# --- Main ---
-main() {
-    echo "========================================"
-    echo " Docker Environment Verification"
-    echo "========================================"
-    echo ""
+# 8. Workspace directory
+check "Workspace (/workspace)" "[ -d /workspace ]"
 
-    check_command   "gh CLI"                    "gh"
-    check_gh_auth   "gh auth"
-    check_gh_extension "gh-pr-unresolved"       "pr-unresolved"
-    check_gh_extension "gh-auto-review-fix"     "auto-review-fix"
-    check_gh_extension "gh-pr-check"            "pr-check"
-    check_gh_extension "gh-ai-review"           "ai-review"
-    check_json      "Claude Code settings"      "/workspace/.claude/settings.local.json"
-    check_file      "Custom commands"           "/workspace/.claude/commands"
+# 9. Global commands
+check "Global commands" "[ -d /home/dev/.claude/commands ] && [ -n \"\$(ls -A /home/dev/.claude/commands/ 2>/dev/null)\" ]"
 
-    echo ""
-    echo "========================================"
-    printf "Result: %d/%d checks passed\n" "$PASS_COUNT" "$TOTAL_COUNT"
-    echo "========================================"
+# 10. Custom scripts in PATH
+check "Custom scripts in PATH" "echo \"\$PATH\" | grep -q custom-scripts"
 
-    if [ "$FAIL_COUNT" -gt 0 ]; then
-        exit 1
-    fi
-}
+# 11. Docker entrypoint
+check "Entrypoint script" "[ -x /home/dev/docker-entrypoint.sh ]"
 
-main
+echo ""
+echo "=== Results: ${pass} passed, ${fail} failed ==="
+
+if [ "$fail" -gt 0 ]; then
+    exit 1
+fi

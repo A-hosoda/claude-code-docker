@@ -229,6 +229,7 @@ docker compose run --rm -v ./:/workspace claude claude
 
 **同期される設定:**
 - `~/.claude/commands/` - グローバルカスタムコマンド（Dockerfile の COPY でイメージに組み込み）
+- `~/.claude/agents/` - グローバルカスタムエージェント（Dockerfile の COPY でイメージに組み込み）
 
 **同期されない設定:**
 - `hooks` - サンドボックス専用の設定（gh コマンドリレー等）のため対象外

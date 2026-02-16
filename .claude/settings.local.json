@@ -5,7 +5,9 @@
       "Bash(touch:*)",
       "Bash(rm:*)",
       "Bash(chmod:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:api.github.com)"
     ],
     "deny": []
   }

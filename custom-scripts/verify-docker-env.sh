@@ -35,31 +35,46 @@ check "Claude Code CLI" "command -v claude"
 # 4. GitHub CLI
 check "gh CLI" "command -v gh"
 
-# 5. gh extensions
+# 5. gh auth
+check "gh auth" "gh auth status"
+
+# 6. gh extensions directory
 check "gh extensions directory" "[ -d ~/.local/share/gh/extensions ]"
 
-# 6. ripgrep
+# 7-10. Individual gh extensions
+check "gh-pr-unresolved" "gh pr-unresolved --help"
+check "gh-auto-review-fix" "gh auto-review-fix --help"
+check "gh-pr-check" "gh pr-check --help"
+check "gh-ai-review" "gh ai-review --help"
+
+# 11. ripgrep
 check "ripgrep" "command -v rg"
 
-# 7. Python3
+# 12. Python3
 check "Python3" "command -v python3"
 
-# 8. uv
+# 13. uv
 check "uv" "command -v uv"
 
-# 9. Workspace directory
+# 14. Workspace directory
 check "Workspace (/workspace)" "[ -d /workspace ]"
 
-# 10. Global commands
+# 15. Claude Code settings
+check "Claude Code settings" "[ -f /workspace/.claude/settings.local.json ] && jq empty /workspace/.claude/settings.local.json"
+
+# 16. Custom commands (project)
+check "Custom commands (project)" "[ -d /workspace/.claude/commands ] && [ -n \"\$(find /workspace/.claude/commands -maxdepth 1 -type f 2>/dev/null | head -1)\" ]"
+
+# 17. Global commands
 check "Global commands" "[ -d /home/dev/.claude/commands ] && [ -n \"\$(ls -A /home/dev/.claude/commands/ 2>/dev/null)\" ]"
 
-# 11. Global agents
+# 18. Global agents
 check "Global agents" "[ -d /home/dev/.claude/agents ] && [ -n \"\$(ls -A /home/dev/.claude/agents/ 2>/dev/null)\" ]"
 
-# 12. Custom scripts in PATH
+# 19. Custom scripts in PATH
 check "Custom scripts in PATH" "echo \"\$PATH\" | grep -q custom-scripts"
 
-# 13. Docker entrypoint
+# 20. Docker entrypoint
 check "Entrypoint script" "[ -x /home/dev/docker-entrypoint.sh ]"
 
 echo ""

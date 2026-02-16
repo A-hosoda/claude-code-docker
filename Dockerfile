@@ -59,6 +59,10 @@ COPY --from=gh-ext-pr-check --chown=dev:dev . /home/dev/.local/share/gh/extensio
 COPY --from=gh-ext-ai-review --chown=dev:dev . /home/dev/.local/share/gh/extensions/gh-ai-review
 RUN chmod +x ~/.local/share/gh/extensions/*/gh-*
 
+# ---- Copy global Claude Code commands and agents from host ----
+COPY --from=claude-global-commands --chown=dev:dev . /home/dev/.claude/commands/
+COPY --from=claude-global-agents --chown=dev:dev . /home/dev/.claude/agents/
+
 # Add custom scripts directory to PATH
 ENV PATH="/home/dev/custom-scripts:${PATH}"
 

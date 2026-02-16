@@ -1,0 +1,100 @@
+name: "Child Issue: Bugfix"
+description: "Bugfix child issue for defect tracking and resolution"
+labels: ["bug"]
+body:
+  - type: input
+    id: related-issue
+    attributes:
+      label: "Related Issue / Prerequisites"
+      description: "Related issue number and prerequisite issues (e.g. #1, depends on #3)"
+      placeholder: "Related: #XX / Depends on: #YY, #ZZ"
+    validations:
+      required: true
+
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: "Bug Description"
+      description: "What is the defect? Describe the incorrect behavior concisely."
+      placeholder: |
+        Example: `gh-pr-check --lang` exits with code 0 even when an invalid language is specified, and no error message is displayed.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: "Reproduction Steps"
+      description: "Step-by-step instructions to reproduce, with expected vs actual behavior."
+      placeholder: |
+        **Steps:**
+        1. Run `gh-pr-check --lang invalid_lang`
+        2. Check exit code
+
+        **Expected:** Exit code 1 with error message to stderr
+        **Actual:** Exit code 0, no output
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: "Expected Behavior"
+      description: "Correct behavior after the fix is applied."
+      placeholder: |
+        - Exit code 1 when invalid language is specified
+        - Error message: `[ERROR] Unknown language: invalid_lang`
+    validations:
+      required: true
+
+  - type: textarea
+    id: investigation-notes
+    attributes:
+      label: "Investigation Notes"
+      description: "Hypothesis, root cause candidates, and impact scope. Optional."
+      placeholder: |
+        **Hypothesis:** Missing validation in `parse_flags()` for `--lang` argument.
+        **Impact:** Other flag parsing may have the same issue.
+    validations:
+      required: false
+
+  - type: textarea
+    id: fix-target
+    attributes:
+      label: "Fix Target Files"
+      description: "Files to modify with brief description of changes."
+      placeholder: |
+        | File | Change |
+        |------|--------|
+        | `lib/cli.sh` | Add validation for `--lang` flag value |
+    validations:
+      required: true
+
+  - type: textarea
+    id: test-cases
+    attributes:
+      label: "Test Cases"
+      description: |
+        Classify into: fix verification / regression.
+        Each case should have input and expected output.
+      placeholder: |
+        **Fix verification:**
+        - [ ] `--lang invalid_lang` -> exit code 1, error message
+
+        **Regression:**
+        - [ ] `--lang typescript` -> still works correctly
+        - [ ] `--lang` without value -> appropriate error
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: "Acceptance Criteria"
+      description: "High-level criteria for PR merge approval."
+      placeholder: |
+        - [ ] Bug is no longer reproducible
+        - [ ] All test cases pass
+        - [ ] No regression in existing functionality
+    validations:
+      required: true

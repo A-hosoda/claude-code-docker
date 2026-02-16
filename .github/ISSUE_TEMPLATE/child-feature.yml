@@ -1,0 +1,91 @@
+name: "Child Issue: Feature"
+description: "Feature child issue for parent issue breakdown"
+labels: ["feature"]
+body:
+  - type: input
+    id: parent-issue
+    attributes:
+      label: "Parent Issue / Prerequisites"
+      description: "Parent issue number and prerequisite issues (e.g. #1, depends on #3)"
+      placeholder: "Parent: #XX / Depends on: #YY, #ZZ"
+    validations:
+      required: true
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: "Summary"
+      description: "What to implement (1-3 sentences). No source code."
+      placeholder: |
+        Example: Implement language detection function that identifies programming languages from project files and outputs results to stdout.
+    validations:
+      required: true
+
+  - type: textarea
+    id: specification
+    attributes:
+      label: "Specification"
+      description: |
+        Use tables, bullet points, and output examples.
+        OK: function signature tables, output format examples, decision logic tables, processing flow steps
+        NG: pseudocode (if-else, for), shell script fragments
+      placeholder: |
+        **Output format:**
+        ```
+        [INFO] Detected language: typescript
+        ```
+
+        **Decision logic:**
+        | Condition | Result |
+        |-----------|--------|
+        | package.json + .ts files | TypeScript |
+    validations:
+      required: true
+
+  - type: textarea
+    id: implementation-target
+    attributes:
+      label: "Implementation Target"
+      description: |
+        File paths and function signature table.
+        Specify new files to create or existing files to modify.
+      placeholder: |
+        **Target file:** `lib/detect.sh` (new)
+
+        | Function | Purpose | Input | Output |
+        |----------|---------|-------|--------|
+        | `detect_languages` | Detect languages | project root path | stdout: one language per line |
+    validations:
+      required: true
+
+  - type: textarea
+    id: test-cases
+    attributes:
+      label: "Test Cases"
+      description: |
+        Classify into: normal / error / boundary.
+        Each case should have input and expected output.
+      placeholder: |
+        **Normal:**
+        - [ ] package.json exists -> outputs "typescript"
+
+        **Error:**
+        - [ ] Non-existent directory -> exit code 1, error message to stderr
+
+        **Boundary:**
+        - [ ] Empty directory -> outputs nothing, exit code 0
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: "Acceptance Criteria"
+      description: "High-level criteria for PR merge approval. Not specific test cases."
+      placeholder: |
+        - [ ] Target file exists and is executable
+        - [ ] All test cases pass
+        - [ ] Integrates with existing modules (e.g. error.sh)
+        - [ ] No shellcheck warnings
+    validations:
+      required: true

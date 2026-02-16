@@ -1,0 +1,58 @@
+name: "Parent Issue"
+description: "Parent issue for planning features or fixes"
+labels: ["parent"]
+body:
+  - type: textarea
+    id: background
+    attributes:
+      label: "Background"
+      description: "Why is this issue needed? Describe the problem or opportunity with concrete examples."
+      placeholder: |
+        Example: Currently, users must manually create parent issues without a template, leading to inconsistent quality and missing context when breaking down into child issues.
+    validations:
+      required: true
+
+  - type: textarea
+    id: goal
+    attributes:
+      label: "Goal"
+      description: "What do you want to achieve? (1-3 sentences, outcome-oriented)"
+      placeholder: |
+        Example: Enable consistent, high-quality parent issue creation so that child issue breakdown is reliable and complete.
+    validations:
+      required: true
+
+  - type: textarea
+    id: requirements
+    attributes:
+      label: "Requirements"
+      description: "Functional requirements as a bulleted list. Each requirement should be verifiable."
+      placeholder: |
+        - Users can create parent issues from a standardized template
+        - Template includes background, goal, requirements, non-goals, and success criteria
+        - Created issues have the "parent" label automatically applied
+    validations:
+      required: true
+
+  - type: textarea
+    id: non-goals
+    attributes:
+      label: "Non-goals"
+      description: "What is explicitly out of scope? List items that could reasonably be expected but are excluded."
+      placeholder: |
+        - Automated child issue generation from parent issue (handled by /create-child-issues)
+        - Implementation-level details (file paths, function signatures)
+    validations:
+      required: true
+
+  - type: textarea
+    id: success-criteria
+    attributes:
+      label: "Success Criteria"
+      description: "How will you measure success? List measurable or observable outcomes."
+      placeholder: |
+        - All parent issues follow a consistent structure
+        - Child issue breakdown covers all parent requirements
+        - No parent issue is missing background context or success criteria
+    validations:
+      required: true

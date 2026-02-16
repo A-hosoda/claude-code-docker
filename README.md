@@ -223,6 +223,20 @@ docker compose run --rm -v /path/to/your/project:/workspace claude claude
 docker compose run --rm -v ./:/workspace claude claude
 ```
 
+### Claude Code Settings Sync
+
+ホストマシンの `~/.claude/` 配下の一部設定が Docker イメージに取り込まれます。
+
+**同期される設定:**
+- `~/.claude/commands/` - グローバルカスタムコマンド（Dockerfile の COPY でイメージに組み込み）
+
+**同期されない設定:**
+- `hooks` - サンドボックス専用の設定（gh コマンドリレー等）のため対象外
+- `settings.json` - ローカル環境固有の設定のため対象外
+- sandbox 設定 - Docker 環境では不要
+
+> **Note:** hooks の同期が必要になった場合は、別途 Issue を作成して対応します。
+
 ### Read-Only Mode
 
 To prevent accidental file modifications, you can mount your workspace as read-only:

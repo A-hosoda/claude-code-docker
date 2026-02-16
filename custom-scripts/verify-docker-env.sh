@@ -9,9 +9,9 @@ fail=0
 
 check() {
     local label="$1"
-    local condition="$2"
+    shift
     printf "[CHECK] %-35s" "$label"
-    if eval "$condition" > /dev/null 2>&1; then
+    if "$@" > /dev/null 2>&1; then
         echo "OK"
         ((pass++))
     else
@@ -24,41 +24,41 @@ echo "=== Claude Code Docker Environment Verification ==="
 echo ""
 
 # 1. Node.js
-check "Node.js" "command -v node"
+check "Node.js" command -v node
 
 # 2. npm
-check "npm" "command -v npm"
+check "npm" command -v npm
 
 # 3. Claude Code CLI
-check "Claude Code CLI" "command -v claude"
+check "Claude Code CLI" command -v claude
 
 # 4. GitHub CLI
-check "gh CLI" "command -v gh"
+check "gh CLI" command -v gh
 
 # 5. gh extensions
-check "gh extensions directory" "[ -d ~/.local/share/gh/extensions ]"
+check "gh extensions directory" test -d ~/.local/share/gh/extensions
 
 # 6. ripgrep
-check "ripgrep" "command -v rg"
+check "ripgrep" command -v rg
 
 # 7. Python / uv
-check "Python3" "command -v python3"
-check "uv" "command -v uv"
+check "Python3" command -v python3
+check "uv" command -v uv
 
 # 8. Workspace directory
-check "Workspace (/workspace)" "[ -d /workspace ]"
+check "Workspace (/workspace)" test -d /workspace
 
-# 9. Global commands
-check "Global commands" "[ -d /home/dev/.claude/commands ] && [ -n \"\$(ls -A /home/dev/.claude/commands/ 2>/dev/null)\" ]"
+# 9. Global commands (directory existence only; may be empty)
+check "Global commands" test -d /home/dev/.claude/commands
 
-# 10. Global agents
-check "Global agents" "[ -d /home/dev/.claude/agents ] && [ -n \"\$(ls -A /home/dev/.claude/agents/ 2>/dev/null)\" ]"
+# 10. Global agents (directory existence only; may be empty)
+check "Global agents" test -d /home/dev/.claude/agents
 
 # 11. Custom scripts in PATH
-check "Custom scripts in PATH" "echo \"\$PATH\" | grep -q custom-scripts"
+check "Custom scripts in PATH" bash -c 'echo "$PATH" | grep -q custom-scripts'
 
 # 12. Docker entrypoint
-check "Entrypoint script" "[ -x /home/dev/docker-entrypoint.sh ]"
+check "Entrypoint script" test -x /home/dev/docker-entrypoint.sh
 
 echo ""
 echo "=== Results: ${pass} passed, ${fail} failed ==="

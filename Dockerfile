@@ -62,5 +62,9 @@ RUN chmod +x ~/.local/share/gh/extensions/*/gh-*
 # Add custom scripts directory to PATH
 ENV PATH="/home/dev/custom-scripts:${PATH}"
 
-# Default to shell. Customize as needed
-ENTRYPOINT ["/bin/bash"]
+# ---- Entrypoint script (copies Docker-specific Claude settings at startup) ----
+COPY --chown=dev:dev docker-entrypoint.sh /home/dev/docker-entrypoint.sh
+RUN chmod +x /home/dev/docker-entrypoint.sh
+
+ENTRYPOINT ["/home/dev/docker-entrypoint.sh"]
+CMD ["/bin/bash"]

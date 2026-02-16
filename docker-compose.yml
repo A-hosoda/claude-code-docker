@@ -31,6 +31,7 @@ services:
 
     environment:
       - GH_TOKEN=${GH_TOKEN}
+      - CLAUDE_CODE_DISABLE_NONINTERACTIVE_SANDBOX=1
 
     tty: true         # For interactive REPL
     stdin_open: true

@@ -10,8 +10,8 @@ services:
         gh-ext-auto-review-fix: ~/Develop/mywork/claude-code/gh-auto-review-fix
         gh-ext-pr-check: ~/Develop/mywork/claude-code/gh-pr-check
         gh-ext-ai-review: ~/Develop/mywork/claude-code/gh-ai-review
-        claude-global-commands: ~/.claude/commands
-        claude-global-agents: ~/.claude/agents
+        claude-global-commands: ${CLAUDE_GLOBAL_COMMANDS_DIR:-.docker/empty}
+        claude-global-agents: ${CLAUDE_GLOBAL_AGENTS_DIR:-.docker/empty}
     image: claude-code-cli:latest
     container_name: claude-code
     working_dir: /workspace

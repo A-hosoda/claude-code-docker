@@ -60,6 +60,9 @@ COPY --from=gh-ext-ai-review --chown=dev:dev . /home/dev/.local/share/gh/extensi
 RUN chmod +x ~/.local/share/gh/extensions/*/gh-*
 
 # ---- Copy global Claude Code commands and agents from host ----
+# Directories default to .docker/empty via docker-compose env-var substitution
+# when ~/.claude/commands or ~/.claude/agents do not exist on the host.
+RUN mkdir -p /home/dev/.claude/commands /home/dev/.claude/agents
 COPY --from=claude-global-commands --chown=dev:dev . /home/dev/.claude/commands/
 COPY --from=claude-global-agents --chown=dev:dev . /home/dev/.claude/agents/
 

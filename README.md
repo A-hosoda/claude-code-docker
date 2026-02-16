@@ -231,6 +231,15 @@ docker compose run --rm -v ./:/workspace claude claude
 - `~/.claude/commands/` - グローバルカスタムコマンド（Dockerfile の COPY でイメージに組み込み）
 - `~/.claude/agents/` - グローバルカスタムエージェント（Dockerfile の COPY でイメージに組み込み）
 
+ホスト側に `~/.claude/commands/` や `~/.claude/agents/` が存在しない場合でも、`.docker/empty` をフォールバックとして使用するため、ビルドは正常に完了します。環境変数でパスを上書きすることも可能です:
+
+```bash
+# デフォルト: ~/.claude/commands が存在すればそちらを使用、なければ .docker/empty
+export CLAUDE_GLOBAL_COMMANDS_DIR=~/.claude/commands
+export CLAUDE_GLOBAL_AGENTS_DIR=~/.claude/agents
+docker compose build
+```
+
 **同期されない設定:**
 - `hooks` - サンドボックス専用の設定（gh コマンドリレー等）のため対象外
 - `settings.json` - ローカル環境固有の設定のため対象外

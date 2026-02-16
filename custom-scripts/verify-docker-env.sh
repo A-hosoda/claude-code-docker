@@ -51,10 +51,13 @@ check "Workspace (/workspace)" "[ -d /workspace ]"
 # 9. Global commands
 check "Global commands" "[ -d /home/dev/.claude/commands ] && [ -n \"\$(ls -A /home/dev/.claude/commands/ 2>/dev/null)\" ]"
 
-# 10. Custom scripts in PATH
+# 10. Global agents
+check "Global agents" "[ -d /home/dev/.claude/agents ] && [ -n \"\$(ls -A /home/dev/.claude/agents/ 2>/dev/null)\" ]"
+
+# 11. Custom scripts in PATH
 check "Custom scripts in PATH" "echo \"\$PATH\" | grep -q custom-scripts"
 
-# 11. Docker entrypoint
+# 12. Docker entrypoint
 check "Entrypoint script" "[ -x /home/dev/docker-entrypoint.sh ]"
 
 echo ""

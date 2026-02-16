@@ -41,23 +41,25 @@ check "gh extensions directory" "[ -d ~/.local/share/gh/extensions ]"
 # 6. ripgrep
 check "ripgrep" "command -v rg"
 
-# 7. Python / uv
+# 7. Python3
 check "Python3" "command -v python3"
+
+# 8. uv
 check "uv" "command -v uv"
 
-# 8. Workspace directory
+# 9. Workspace directory
 check "Workspace (/workspace)" "[ -d /workspace ]"
 
-# 9. Global commands
+# 10. Global commands
 check "Global commands" "[ -d /home/dev/.claude/commands ] && [ -n \"\$(ls -A /home/dev/.claude/commands/ 2>/dev/null)\" ]"
 
-# 10. Global agents
+# 11. Global agents
 check "Global agents" "[ -d /home/dev/.claude/agents ] && [ -n \"\$(ls -A /home/dev/.claude/agents/ 2>/dev/null)\" ]"
 
-# 11. Custom scripts in PATH
+# 12. Custom scripts in PATH
 check "Custom scripts in PATH" "echo \"\$PATH\" | grep -q custom-scripts"
 
-# 12. Docker entrypoint
+# 13. Docker entrypoint
 check "Entrypoint script" "[ -x /home/dev/docker-entrypoint.sh ]"
 
 echo ""
